@@ -1,0 +1,26 @@
+form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+input{
+    display: block;
+    width: 600px;
+    background-color: RGB(236 250 254);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: #112c33;
+    border: none;
+    padding: 0.707rem 0.707rem 0.707rem;
+    border-radius: 300px;
+    box-shadow: 5px 6px 12px 0 RGB(0 53 84 / 20%), -4px -5px 10px 0 RGB(255 255 255 / 12%);
+    font-family: Poppins, sans-serif;
+    font-size: 0.707rem;
+    margin-top: 0.707em;
+
+    & :first-of-type{
+        margin-top: 0em;
+    }
+}

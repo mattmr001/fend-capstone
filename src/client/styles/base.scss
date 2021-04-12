@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400');
+
+@import url('https://fonts.googleapis.com/css?family=Poppins:400');
+
+
+* {
+    margin: 0;
+    max-width: 100%;
+}
+
+
+/* Scale 1.250 - Major Third*/
+html {font-size: 118.8%;} /*19px*/
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: white;
+    font-family: Poppins, sans-serif;
+    font-weight: 400;
+    line-height: 1.75;
+    color: #333333;
+    margin: 0;
+}
+
+p {margin-bottom: 1rem;}
+
+h1, h2, h3, h4, h5 {
+    margin: 0.8rem 0 0.41rem;
+    font-family: Poppins, sans-serif;
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+h1 {
+    margin-top: 0;
+    font-size: 3.052rem;
+}
+
+h2 {font-size: 2.441rem;}
+
+h3 {font-size: 1.953rem;}
+
+h4 {font-size: 1.563rem;}
+
+h5 {font-size: 1.25rem;}
+
+small, .text_small {font-size: 0.8rem;}
+
+
+
+
+main {
+    flex: 2;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+    margin: 6.104rem 3.052rem 3.052rem 3.052rem;
+    grid-gap:  1.414rem;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.l-container{
+    display: grid;
+    background: #2980B9;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #FFFFFF, #6DD5FA, #2980B9);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #FFFFFF, #6DD5FA, #2980B9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #000000;
+    justify-content: center;
+    align-items: center;
+    max-width: 1440px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
