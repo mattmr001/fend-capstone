@@ -3,4 +3,5 @@ node_modules
 .idea/watcherTasks.xml
 package-lock.json
 .idea/workspace.xml
+.idea/vcs.xml
 dist

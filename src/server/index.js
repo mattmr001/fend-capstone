@@ -37,58 +37,179 @@ app.get('/test', function (req, res) {
     res.json(mockAPIResponse);
 })
 
-async function getArticleSentiment(url) {
-    try {
-        const protocol = 'https'
-        const sentimentApiUrl = 'api.meaningcloud.com/sentiment-2.1'
+
+// Create a new date instance dynamically with JS
+let d = new Date();
+let newDate = d.getMonth() + 1 + '.' + d.getDate() + '.' + d.getFullYear();
+
+
+async function getPlaceDetails(placename, country){
+    // API document: https://www.geonames.org/export/web-services.html
+    try{
+
+        const protocol = 'http'
+        let geoNamesUrl = 'api.geonames.org/postalCodeLookupJSON';
+
         const params = {
-            key: `${process.env.API_KEY}`,
-            of: "json",
-            lang: "en",
-            url: url
+            placename: `${placename}`,
+            country: `${country}`,
+            username: `${process.env.GEONAMES_API_KEY}`,
         }
-        const options = {
-            method: 'POST',
-            origin: ['http://localhost:8081', 'https://fierce-falls-84600.herokuapp.com'],
-            credentials: 'same-origin',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }
-        const apiQuery = `${protocol}://${sentimentApiUrl}?${querystring.stringify(params)}`
+
+        let options = {
+            method: 'GET',
+        };
+
+        const apiQuery = `${protocol}://${geoNamesUrl}?${querystring.stringify(params)}`
         console.log(apiQuery)
         const result = await fetch(apiQuery, options)
         const resultJson = await result.json();
         return resultJson
-    } catch (error) {
+
+    } catch(error) {
         throw(error)
     }
 }
 
-app.post('/sentiment', async(req, res) => {
+// Requirements: If the trip is in the future, you will get a predicted forecast.
+async function getHistoricalWeather(lat, lon, startDate, endDate ){
+    try{
+        const protocol = 'https'
+        let weatherBitUrl = 'api.weatherbit.io/v2.0/history/daily';
+        const params = {
+            lat: `${lat}`,
+            lon: `${lon}`,
+            start_date: `${startDate}`,
+            end_date: `${endDate}`,
+            key: `${process.env.WEATHERBIT_API_KEY}`,
+        }
+
+        let options = {
+            method: 'GET',
+        };
+
+        const apiQuery = `${protocol}://${weatherBitUrl}?${querystring.stringify(params)}`
+        console.log(apiQuery)
+        const result = await fetch(apiQuery, options)
+        const resultJson = await result.json();
+        return resultJson
+    }
+    catch (error) {
+        throw(error)
+    }
+}
+
+
+//Requirements: If the trip is within a week, you will get the current weather forecast
+async function getSixteenDayForecast(lat, lon, days){
+    try{
+        const protocol = 'https'
+        let weatherBitUrl = 'api.weatherbit.io/v2.0/forecast/daily';
+        // TODO Create check so that the lat and lon only have 3 decimals otherwise the call will fail
+        const params = {
+            lat: `${lat}`,
+            lon: `${lon}`,
+            days: `${days}`,
+            key: `${process.env.WEATHERBIT_API_KEY}`,
+        }
+
+        let options = {
+            method: 'GET',
+        };
+
+        const apiQuery = `${protocol}://${weatherBitUrl}?${querystring.stringify(params)}`
+        console.log(apiQuery)
+        const result = await fetch(apiQuery, options)
+        const resultJson = await result.json();
+        return resultJson
+    }
+    catch (error) {
+        throw(error)
+    }
+}
+
+// What information are you going to submit to the API to achieve an appropriate image? What if there are no results?
+// What Parameters will you want to set to pull in images?
+// How will you submit your data from the location field to a Pixabay URL parameter without having spaces in the url?
+async function getDestinationImage(city){
+    try{
+        const protocol = 'https'
+        let pixabayUrl = 'pixabay.com/api/';
+        // TODO Create check  latitude, longitude, country
+        const params = {
+            key: `${process.env.PIXABAY_API_KEY}`,
+            q: `${city}`,
+            editors_choice: 'true',
+            order: 'popular',
+            image_type: 'photo'
+        }
+
+        let options = {
+            method: 'GET',
+        };
+
+        const apiQuery = `${protocol}://${pixabayUrl}?${querystring.stringify(params)}`
+        console.log(apiQuery)
+        const result = await fetch(apiQuery, options)
+        const resultJson = await result.json();
+        return resultJson
+    }
+    catch (error) {
+        throw(error)
+    }
+}
+
+
+app.post('/tripData', async(req, res) => {
     try {
+        let tripData = {}
         const body = req.body
         // DEBUG
         // console.log(`req BODY: ${JSON.stringify(body)}`)
-        const articleUrl = body.formText
+        const city = body.city
+        const country = body.country
         // DEBUG
-        // console.log(`req BODY URL: ${JSON.stringify(articleUrl)}`)
+        // console.log(`req Body City: ${JSON.stringify(city)}`)
+        // console.log(`req Body Country: ${JSON.stringify(country)}`)
         console.log('Fetching data from API endpoint:')
-        const articleSentiment = await getArticleSentiment(articleUrl)
-        let newData = {
-                agreement: articleSentiment.agreement,
-                subjectivity: articleSentiment.subjectivity,
-                confidence: articleSentiment.confidence,
-                irony: articleSentiment.irony,
-        }
+        const placeDetails = await getPlaceDetails(city, country)
 
-        res.json(newData)
+        tripData["city"] = city
+        tripData["country"] = country
+        tripData["lat"] = placeDetails.postalcodes[0].lat
+        tripData["lon"] = placeDetails.postalcodes[0].lng
+
+        const sixteenDayForecast = await getSixteenDayForecast(tripData.lat, tripData.lon, 2)
+        // get16DayForecast("43.651", "-79.347", "1").then(r => console.log(r))
+
+        let weatherForecasts = []
+        for (i in sixteenDayForecast.data) {
+            const day = {};
+            day["validDate"] = sixteenDayForecast.data[i].valid_date;
+            day["maxTemp"] = sixteenDayForecast.data[i].max_temp;
+            day["lowTemp"] = sixteenDayForecast.data[i].low_temp;
+            day["description"] = sixteenDayForecast.data[i].weather.description
+            weatherForecasts.push(day)
+            }
+
+        tripData["weatherForecasts"] = weatherForecasts
+
+        const destinationImage = await getDestinationImage(city)
+        const img = destinationImage.hits[0].webformatURL
+        tripData["img"] = img
+
+
+        // Write a for loop that gets valid_date, max_temp, low_temp, weather.description, 3
+        res.json(tripData)
+        console.log(tripData)
         console.log('COMPLETED FETCH')
 
     } catch (error) {
         console.log(error)
     }
 })
+
+
 
 
 let port = process.env.PORT;
@@ -99,8 +220,13 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
 
+// getPlaceDetails("Toronto", "CA").then(r => console.log(r))
 
 
-console.log('test')
+// get16DayForecast("43.651", "-79.347", "1").then(r => console.log(r))
+// getHistoricalWeather("43.651", "-79.347", '2021-04-09', '2021-04-10').then(r => console.log(r))
+// getRelatedImage('Toronto').then(r => console.log(r))
+// console.log('test')
 
-console.log(`Your API key is ${process.env.API_KEY}`);
+
+// console.log(`Your API key is ${process.env.API_KEY}`);
