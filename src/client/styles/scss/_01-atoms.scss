@@ -2,17 +2,37 @@
 
 /* atoms */
 .day__data{}
+.day__data--date{}
+.day__data--img{}
 .day__data--temp-max{}
 .day__data--temp-low{}
-.day__data--img{}
+.day__data--description{}
+
 
 /* molecules */
 .day{
-/*figure*/
+  text-align: center;
 }
 
 /* organisms */
 .weather-forecasts{
   /*grid*/
   display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  justify-content: center;
+  align-items: center;
+  overflow-x: scroll;
+}
+
+
+//atoms
+.banner-img{
+  width: 100%;
+  height: auto;
+}
+
+// molecule
+.banner{
+
 }

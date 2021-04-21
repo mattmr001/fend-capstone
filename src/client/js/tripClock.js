@@ -21,6 +21,13 @@ function tripClock(startDate, endDate){
         return daysBetween
     };
 
+//     TODO: if startdate is within the next 16 days run get16DayWeatherForecast
+//     TODO: elseif state is over 16 days run getHistoricalWeatherDATA
+//     TODO: If startDate is between 16 days run and EndDate is over 16 days
+
+
+
+
 
 
 }

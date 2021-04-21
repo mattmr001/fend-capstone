@@ -36,7 +36,7 @@ module.exports = {
             filename: "./index.html",
         }),
         new MiniCssExtractPlugin({filename: '[name].css'}),
-        // new WorkboxPlugin.GenerateSW({cleanupOutdatedCaches: true}),
+        new WorkboxPlugin.GenerateSW({cleanupOutdatedCaches: true}),
         new CleanWebpackPlugin({
             // Simulate the removal of files
             dry: true,

@@ -131,7 +131,7 @@ async function getSixteenDayForecast(lat, lon, days){
 // What information are you going to submit to the API to achieve an appropriate image? What if there are no results?
 // What Parameters will you want to set to pull in images?
 // How will you submit your data from the location field to a Pixabay URL parameter without having spaces in the url?
-async function getDestinationImage(city){
+async function getRelatedImage(city){
     try{
         const protocol = 'https'
         let pixabayUrl = 'pixabay.com/api/';
@@ -139,7 +139,6 @@ async function getDestinationImage(city){
         const params = {
             key: `${process.env.PIXABAY_API_KEY}`,
             q: `${city}`,
-            editors_choice: 'true',
             order: 'popular',
             image_type: 'photo'
         }
@@ -160,6 +159,7 @@ async function getDestinationImage(city){
 }
 
 
+
 app.post('/tripData', async(req, res) => {
     try {
         let tripData = {}
@@ -171,7 +171,8 @@ app.post('/tripData', async(req, res) => {
         // DEBUG
         // console.log(`req Body City: ${JSON.stringify(city)}`)
         // console.log(`req Body Country: ${JSON.stringify(country)}`)
-        console.log('Fetching data from API endpoint:')
+
+        // :::::::::::::::::::::::::::::::::::::::::::
         const placeDetails = await getPlaceDetails(city, country)
 
         tripData["city"] = city
@@ -179,6 +180,7 @@ app.post('/tripData', async(req, res) => {
         tripData["lat"] = placeDetails.postalcodes[0].lat
         tripData["lon"] = placeDetails.postalcodes[0].lng
 
+        // :::::::::::::::::::::::::::::::::::::::::::
         const sixteenDayForecast = await getSixteenDayForecast(tripData.lat, tripData.lon, 2)
         // get16DayForecast("43.651", "-79.347", "1").then(r => console.log(r))
 
@@ -191,17 +193,36 @@ app.post('/tripData', async(req, res) => {
             day["description"] = sixteenDayForecast.data[i].weather.description
             weatherForecasts.push(day)
             }
-
         tripData["weatherForecasts"] = weatherForecasts
 
-        const destinationImage = await getDestinationImage(city)
-        const img = destinationImage.hits[0].webformatURL
-        tripData["img"] = img
+        // :::::::::::::::::::::::::::::::::::::::::::
+        const destinationImage = await getRelatedImage(city)
+        const cityImg = destinationImage.hits[0].webformatURL
+        tripData["cityImg"] = cityImg
 
+        // :::::::::::::::::::::::::::::::::::::::::::
+        let descriptionImages = {};
+        for (let i in tripData.weatherForecasts) {
+            let description = tripData.weatherForecasts[i].description
+            const relatedImage = await getRelatedImage(description)
 
-        // Write a for loop that gets valid_date, max_temp, low_temp, weather.description, 3
+            // TODO: if has key hits
+            const weatherDescriptionImg = relatedImage.hits.webformatURL;
+            descriptionImages[description] = weatherDescriptionImg
+
+            // TODO: else
+            // descriptionImages[description] = 'N/A PLACEHOLDER'
+        }
+        tripData["descriptionImages"] = descriptionImages
+
+        // console.log("LOG descriptionImages OBJECT")
+        // console.log(descriptionImages)
+        console.log("LOG tripData.descriptionImages OBJECT ")
+        console.log(tripData["descriptionImages"])
+
+        // :::::::::::::::::::::::::::::::::::::::::::
         res.json(tripData)
-        console.log(tripData)
+        // console.log(tripData)
         console.log('COMPLETED FETCH')
 
     } catch (error) {
