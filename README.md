@@ -9,8 +9,8 @@
 - Enter city: Toronto
 - Enter Country: CA
 
-## Questions / TODO
-- [ ] How the hell do I create modules in server folder?
+## Questions
+- [ ] How the hell do I create modules in server folder? Are their module naming conventions I should look at?
 
 
 - [ ] Why I am I getting duplicate results for the first form submission?
