@@ -1,7 +1,38 @@
-# Project Instructions
+## RUN
 
-This repo is your starter code for the project. It is the same as the starter code we began with in lesson 2. Install and configure Webpack just as we did in the course. Feel free to refer to the course repo as you build this one, and remember to make frequent commits and to create and merge branches as necessary!
+- npm run build-prod
+- npm run start
+  
 
+- Select any future Start Date
+- Select any future end Date
+- Enter city: Toronto
+- Enter Country: CA
+
+## Questions / TODO
+- [ ] How the hell do I create modules in server folder?
+
+
+- [ ] Why I am I getting duplicate results for the first form submission?
+
+
+- [ ] How do I set up the service worker at the end of my index.html page to cache trips for offline use? Why are they suggesting I do this?
+
+
+## TODO
+
+- [ ] Figure out how to shit out form/api call errors
+
+- [ ] Set up service works for offline usage
+  https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#2
+
+>Stage 5 - Service Workers
+>The project must have set up service workers in webpack.
+>
+> to allow offline access, what the service workers actually do is create a cached version of your website that they can supply if the server can’t be reached.
+
+
+## Project Goals
 The goal of this project is to give you practice with:
 - Setting up Webpack
 - Sass styles
@@ -10,26 +41,17 @@ The goal of this project is to give you practice with:
 - Service workers
 - Using APIs and creating requests to external urls
 
-
-
 > Quotation example insert paragraph here
 
+### APIS Used for project
 
-## Getting started
+- https://www.geonames.org/
+- https://www.weatherbit.io/api/climate-normals
+- https://www.weatherbit.io/api/weather-forecast-16-day
+- https://pixabay.com/service/about/api/
 
-Remember that once you clone, you will still need to install everything:
 
-`cd` into your new folder and run:
-- `npm install`
-
-## Setting up the API
-
-The MeaningCloud API API is perhaps different than what you've used before. It has you install a node module to run certain commands through, it will simplify the requests we need to make from our node/express backend.
-
-### Step 1: Signup for an API key
-First, you will need to go [here](https://www.meaningcloud.com/developer/login). Signing up will get you an API key. Don't worry, at the time of this course, the API is free to use up to 1000 requests per day or 333 intensive requests. It is free to check how many requests you have remaining for the day.
-
-### Step 2: Environment Variables
+### Environment Variables
 Next we need to declare our API keys, which will look something like this:
 ```
 // set Meaningcloud API credentias
@@ -38,47 +60,28 @@ API_KEY = "Your api key"
 
 ...but there's a problem with this. We are about to put our personal API keys into a file, but when we push, this file is going to be available PUBLICLY on Github. Private keys, visible publicly are never a good thing. So, we have to figure out a way to make that not happen. The way we will do that is with environment variables. Environment variables are pretty much like normal variables in that they have a name and hold a value, but these variables only belong to your system and won't be visible when you push to a different environment like Github.
 
-- [ ] Use npm or yarn to install the dotenv package ```npm install dotenv```. This will allow us to use environment variables we set in a new file
-- [ ] Create a new ```.env``` file in the root of your project
-- [ ] Go to your .gitignore file and add ```.env``` - this will make sure that we don't push our environment variables to Github! If you forget this step, all of the work we did to protect our API keys was pointless.
-- [ ] Fill the .env file with your API keys like this:
+- Use npm or yarn to install the dotenv package ```npm install dotenv```. This will allow us to use environment variables we set in a new file
+- Create a new ```.env``` file in the root of your project
+- Go to your .gitignore file and add ```.env``` - this will make sure that we don't push our environment variables to Github! If you forget this step, all of the work we did to protect our API keys was pointless.
+- Fill the .env file with your API keys like this:
 ```
 API_KEY=**************************
 ```
-- [ ] Add this code to the very top of your server/index.js file:
+- Add this code to the very top of your server/index.js file:
 ```
 const dotenv = require('dotenv');
 dotenv.config();
 ```
-- [ ] Reference variables you created in the .env file by putting ```process.env``` in front of it, an example might look like this:
+- Reference variables you created in the .env file by putting ```process.env``` in front of it, an example might look like this:
 ```
 console.log(`Your API key is ${process.env.API_KEY}`);
 ```
 ...Not that you would want to do that. This means that our updated API credential settings will look like this:
 ```javascript
-// set Meaining cloud API credentials
-// NOTICE that textapi is the name I used, but it is arbitrary. 
-// You could call it aylienapi, nlp, or anything else, 
-//   just make sure to make that change universally!
-
+// set various API credentials in .env files like below
   const application_key = process.env.API_KEY
 
 ```
-
-### Step 5: Using the API
-
-We're ready to go! The API has a lot of different endpoints you can take a look at [here](https://docs.aylien.com/textapi/endpoints/#api-endpoints). And you can see how using the SDK simplifies the requests we need to make. 
-
-I won't provide further examples here, as it's up to you to create the various requests and make sure your server is set up appropriately.
-
-## After the Meaningcloud API
-
-Once you are hooked up to the MeainingCloud API, you are most of the way there! Along with making sure you are following all the requirements in the project rubric in the classroom, here are a few other steps to make sure you take.
-
-- Parse the response body to dynamically fill content on the page.
-- Test that the server and form submission work, making sure to also handle error responses if the user input does not match API requirements. 
-- Go back to the web pack config and add the setup for service workers.  
-- Test that the site is now available even when you stop your local server 
 
 ## Deploying
 

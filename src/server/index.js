@@ -2,8 +2,8 @@
 const express = require('express')
 const mockAPIResponse = require('./mockAPI.js')
 
-/* Start up an instance of app */
-const app = express()
+/* Start up an instance of index */
+const index = express()
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -17,31 +17,33 @@ const fetch = require('node-fetch')
 const cors = require('cors');
 
 /* Middleware*/
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(express.json())
-app.use(cors());
+index.use(bodyParser.urlencoded({ extended: false }));
+index.use(bodyParser.json());
+index.use(express.json())
+index.use(cors());
 
 /* Initialize the main project folder*/
-app.use(express.static('dist'))
+index.use(express.static('dist'))
 
 // const port = 8081
 
+
+/* Local Modules */
+// TODO: figure out how create modules and import them
+
 console.log(JSON.stringify(mockAPIResponse))
 
-app.get('/', function (req, res) {
+index.get('/', function (req, res) {
     res.sendFile('dist/index.html');
 })
 
-app.get('/test', function (req, res) {
+index.get('/test', function (req, res) {
     res.json(mockAPIResponse);
 })
 
-
-// Create a new date instance dynamically with JS
-let d = new Date();
-let newDate = d.getMonth() + 1 + '.' + d.getDate() + '.' + d.getFullYear();
-
+// :::::::::::::::::::::::::::::::::::::::::::
+// TODO: Create module for the functions below fetching api data
+// :::::::::::::::::::::::::::::::::::::::::::
 
 async function getPlaceDetails(placename, country){
     // API document: https://www.geonames.org/export/web-services.html
@@ -71,16 +73,19 @@ async function getPlaceDetails(placename, country){
     }
 }
 
-// Requirements: If the trip is in the future, you will get a predicted forecast.
-async function getHistoricalWeather(lat, lon, startDate, endDate ){
+async function getWeatherNorms(lat, lon, startDate, endDate ){
     try{
         const protocol = 'https'
-        let weatherBitUrl = 'api.weatherbit.io/v2.0/history/daily';
+        let weatherBitUrl = 'api.weatherbit.io/v2.0/normals';
+
+        let formattedStartDate = startDate.slice(5)
+        let formattedEndDate = endDate.slice(5)
+
         const params = {
             lat: `${lat}`,
             lon: `${lon}`,
-            start_date: `${startDate}`,
-            end_date: `${endDate}`,
+            start_day: `${formattedStartDate}`,
+            end_day: `${formattedEndDate}`,
             key: `${process.env.WEATHERBIT_API_KEY}`,
         }
 
@@ -99,13 +104,11 @@ async function getHistoricalWeather(lat, lon, startDate, endDate ){
     }
 }
 
-
 //Requirements: If the trip is within a week, you will get the current weather forecast
 async function getSixteenDayForecast(lat, lon, days){
     try{
         const protocol = 'https'
         let weatherBitUrl = 'api.weatherbit.io/v2.0/forecast/daily';
-        // TODO Create check so that the lat and lon only have 3 decimals otherwise the call will fail
         const params = {
             lat: `${lat}`,
             lon: `${lon}`,
@@ -128,14 +131,10 @@ async function getSixteenDayForecast(lat, lon, days){
     }
 }
 
-// What information are you going to submit to the API to achieve an appropriate image? What if there are no results?
-// What Parameters will you want to set to pull in images?
-// How will you submit your data from the location field to a Pixabay URL parameter without having spaces in the url?
 async function getRelatedImage(city){
     try{
         const protocol = 'https'
         let pixabayUrl = 'pixabay.com/api/';
-        // TODO Create check  latitude, longitude, country
         const params = {
             key: `${process.env.PIXABAY_API_KEY}`,
             q: `${city}`,
@@ -159,71 +158,241 @@ async function getRelatedImage(city){
 }
 
 
+// :::::::::::::::::::::::::::::::::::::::::::
+// TODO: Create a module for the functions below. These functions help us build properties for our tripData object( whats a good name for a module name for this?)
+// :::::::::::::::::::::::::::::::::::::::::::
+function buildListFromObjectAttribute(obj, dataKey){
+    let attributeList = []
+    for (let i in obj){
+        let value = obj[i][dataKey]
+        attributeList.push(value)
+    }
+    return attributeList
+}
 
-app.post('/tripData', async(req, res) => {
+function calculateAverageTemperatures(list){
+    let the_count = 0
+    let sum = 0
+    for (let i in list){
+        the_count += 1
+        sum += list[i];
+    }
+    let averageTemperature = sum / the_count;
+    let averageTemperatureRounded = Math.round(averageTemperature * 10) / 10
+    return averageTemperatureRounded
+}
+
+function buildAverageTemp(apiFetch, tripData){
+    let tempList = buildListFromObjectAttribute(apiFetch, "temp")
+    let averageTemperature = calculateAverageTemperatures(tempList)
+    tripData["averageTemp"] = averageTemperature
+}
+
+function buildAverageMaxTemp(apiFetch, tripData){
+    let maxTempList = buildListFromObjectAttribute(apiFetch, "max_temp")
+    let averageMaxTemperature = calculateAverageTemperatures(maxTempList)
+    tripData["averageMaxTemp"] = averageMaxTemperature
+}
+
+function buildAverageMinTemp(apiFetch, tripData){
+    let minTempList = buildListFromObjectAttribute(apiFetch, "min_temp")
+    let averageMinTemperature = calculateAverageTemperatures(minTempList)
+    tripData["averageMinTemp"] = averageMinTemperature
+}
+
+
+function buildAverageDescriptionOfWeather(apiFetch, tripData){
+
+    const temperatureData = apiFetch
+    let weatherForecasts = []
+
+    function countDescriptions(descriptionList){
+
+        // Count duplicate descriptions
+        // reference: https://stackoverflow.com/questions/19395257/how-to-count-duplicate-value-in-an-array-in-javascript
+        let descriptionCounts = {};
+        descriptionList.forEach(function(x) { descriptionCounts[x] = (descriptionCounts[x] || 0)+1; });
+        // DEBUG:
+        // console.log(DescriptionCounts)
+        return descriptionCounts
+    }
+
+    function sortCountedDescriptions(descriptionCounts){
+
+        let sortedDescriptions = [];
+        for (let num in descriptionCounts) {
+            sortedDescriptions.push([num, descriptionCounts[num]]);
+        }
+        sortedDescriptions.sort(function(a, b) {
+            return b[1] - a[1];
+        });
+        // DEBUG:
+        // console.log(sortedDescriptions)
+
+        return sortedDescriptions
+    }
+    // The 16dayforcast API will return the property description. The weatherNorm API will not.
+    // The condition below ensures that regardless of which api is used
+    // our tripData object will receive an averageDescription.
+    if (temperatureData[0].hasOwnProperty('weather')) {
+        let weatherList = buildListFromObjectAttribute(temperatureData, "weather")
+        let descriptionList = buildListFromObjectAttribute(weatherList, "description")
+
+        const countedDescriptions = countDescriptions(descriptionList)
+        const sortedDescriptions = sortCountedDescriptions(countedDescriptions)
+        tripData["averageDescription"] = sortedDescriptions[0][0]
+    } else {
+        tripData["averageDescription"] = "No forecast description"
+    }
+}
+
+
+function buildDailyForecasts(apiFetch, tripData){
+
+    const temperatureData = apiFetch
+    let weatherForecasts = []
+
+    for (let i in temperatureData) {
+        const day = {};
+
+        day["date"] = temperatureData[i].valid_date
+
+        // The 16dayforcast API will return the property valid_date. The weatherNorm API will not.
+        // The condition below ensures that regardless of which api is used
+        // our tripData object has-a a date.
+        if (temperatureData[i].hasOwnProperty('valid_date')){
+            day["date"] = temperatureData[i].valid_date;
+        } else {
+            day["date"] = tripData.startDate.slice(0, 7) + "-" + temperatureData[i].day;
+        }
+        day["temp"] = temperatureData[i].temp;
+        day["max_temp"] = temperatureData[i].max_temp;
+        day["min_temp"] = temperatureData[i].min_temp;
+
+        // The 16dayforcast api will return the property weather.description. The weatherNorm api will not.
+        // The condition below ensures that regardless of which api is used
+        // our tripData object has-a day.description
+        if (temperatureData[i].hasOwnProperty('weather')){
+            day["description"] = temperatureData[i].weather.description
+        } else {
+            day["description"] = "No forecast description"
+        }
+        weatherForecasts.push(day)
+        console.log("Start all temperature.data:")
+        console.log(temperatureData[i])
+        console.log("End all temperature.data")
+    }
+
+    tripData["weatherForecasts"] = weatherForecasts
+    // console.log(tripData)
+
+}
+
+// :::::::::::::::::::::::::::::::::::::::::::
+// TODO: Create module for the functions below. These functions call helpers and build data related to specific api call. (whats a good name for this module?)
+// :::::::::::::::::::::::::::::::::::::::::::
+
+function buildTripDataPlaceDetails(tripData, placeDetails){
+    tripData["lat"] = placeDetails.postalcodes[0].lat
+    tripData["lon"] = placeDetails.postalcodes[0].lng
+}
+
+function buildTripDataSixteenDayForecast(tripData, sixteenDayForecast){
+
+    const temperatureData = sixteenDayForecast.data
+
+    buildAverageTemp(temperatureData, tripData)
+    buildAverageMaxTemp(temperatureData, tripData)
+    buildAverageMinTemp(temperatureData, tripData)
+    buildAverageDescriptionOfWeather(temperatureData, tripData)
+    buildDailyForecasts(temperatureData, tripData)
+}
+
+function buildTripDataWeatherNorms(tripData, weatherNorms){
+    const temperatureData = weatherNorms.data
+
+    buildAverageTemp(temperatureData, tripData)
+    buildAverageMaxTemp(temperatureData, tripData)
+    buildAverageMinTemp(temperatureData, tripData)
+    buildAverageDescriptionOfWeather(temperatureData, tripData)
+    buildDailyForecasts(temperatureData, tripData)
+    console.log(tripData)
+    console.log(weatherNorms.data)
+}
+
+function buildTripDataDestinationImage(tripData, relatedImage){
+    const destinationImage = relatedImage
+    const cityImg = destinationImage.hits[0].webformatURL
+    tripData["cityImg"] = cityImg
+}
+
+
+function buildTripDataDescriptionImages(tripData, relatedImage){
+
+    let descriptionImages = {};
+    for (let i in tripData.weatherForecasts) {
+        let description = tripData.weatherForecasts[i].description
+        const relatedImage = relatedImage(description)
+
+        const weatherDescriptionImg = relatedImage.hits[0].previewURL;
+        descriptionImages[description] = weatherDescriptionImg
+
+    }
+    tripData["descriptionImages"] = descriptionImages
+
+    // console.log("LOG descriptionImages OBJECT")
+    // console.log(descriptionImages)
+    console.log("LOG tripData.descriptionImages OBJECT ")
+    console.log(tripData["descriptionImages"])
+
+}
+
+
+
+
+index.post('/tripData', async(req, res) => {
     try {
-        let tripData = {}
+
+        // Create variables from the values posted from our index page
         const body = req.body
-        // DEBUG
-        // console.log(`req BODY: ${JSON.stringify(body)}`)
         const city = body.city
         const country = body.country
+        const startDate = body.startDate
+        const endDate = body.endDate
+        const daysUntilTrip = body.daysUntilTrip
+        const tripDuration = body.tripDuration
         // DEBUG
-        // console.log(`req Body City: ${JSON.stringify(city)}`)
-        // console.log(`req Body Country: ${JSON.stringify(country)}`)
+        // console.log(`req BODY: ${JSON.stringify(body)}`)
+
+        // Begin building the properties for our tripData object.
+        let tripData = {}
+        tripData["city"] = city
+        tripData["country"] = country
+        tripData["tripDuration"] = tripDuration
+        tripData["startDate"] = startDate
+        tripData["endDate"] = endDate
 
         // :::::::::::::::::::::::::::::::::::::::::::
         const placeDetails = await getPlaceDetails(city, country)
+        buildTripDataPlaceDetails(tripData, placeDetails)
 
-        tripData["city"] = city
-        tripData["country"] = country
-        tripData["lat"] = placeDetails.postalcodes[0].lat
-        tripData["lon"] = placeDetails.postalcodes[0].lng
-
-        // :::::::::::::::::::::::::::::::::::::::::::
-        const sixteenDayForecast = await getSixteenDayForecast(tripData.lat, tripData.lon, 2)
-        // get16DayForecast("43.651", "-79.347", "1").then(r => console.log(r))
-
-        let weatherForecasts = []
-        for (i in sixteenDayForecast.data) {
-            const day = {};
-            day["validDate"] = sixteenDayForecast.data[i].valid_date;
-            day["maxTemp"] = sixteenDayForecast.data[i].max_temp;
-            day["lowTemp"] = sixteenDayForecast.data[i].low_temp;
-            day["description"] = sixteenDayForecast.data[i].weather.description
-            weatherForecasts.push(day)
-            }
-        tripData["weatherForecasts"] = weatherForecasts
-
-        // :::::::::::::::::::::::::::::::::::::::::::
-        const destinationImage = await getRelatedImage(city)
-        const cityImg = destinationImage.hits[0].webformatURL
-        tripData["cityImg"] = cityImg
-
-        // :::::::::::::::::::::::::::::::::::::::::::
-        let descriptionImages = {};
-        for (let i in tripData.weatherForecasts) {
-            let description = tripData.weatherForecasts[i].description
-            const relatedImage = await getRelatedImage(description)
-
-            // TODO: if has key hits
-            const weatherDescriptionImg = relatedImage.hits.webformatURL;
-            descriptionImages[description] = weatherDescriptionImg
-
-            // TODO: else
-            // descriptionImages[description] = 'N/A PLACEHOLDER'
+        // Call one of two API's depending on weather the days until the users trip is over or under 15 days.
+        if (daysUntilTrip <= 15){
+            const sixteenDayForecast = await getSixteenDayForecast(tripData.lat, tripData.lon, tripData.tripDuration)
+            buildTripDataSixteenDayForecast(tripData, sixteenDayForecast)
         }
-        tripData["descriptionImages"] = descriptionImages
 
-        // console.log("LOG descriptionImages OBJECT")
-        // console.log(descriptionImages)
-        console.log("LOG tripData.descriptionImages OBJECT ")
-        console.log(tripData["descriptionImages"])
+        else if (daysUntilTrip > 15){
+            const weatherNorms = await getWeatherNorms(tripData.lat, tripData.lon, tripData.startDate, tripData.endDate)
+            buildTripDataWeatherNorms(tripData, weatherNorms)
+        }
 
-        // :::::::::::::::::::::::::::::::::::::::::::
+        const destinationImage = await getRelatedImage(city)
+        buildTripDataDestinationImage(tripData, destinationImage)
+
+        // const descriptionImages = await getRelatedImage()
+        // buildTripDataDescriptionImages(tripData, descriptionImages)
         res.json(tripData)
-        // console.log(tripData)
-        console.log('COMPLETED FETCH')
 
     } catch (error) {
         console.log(error)
@@ -232,22 +401,10 @@ app.post('/tripData', async(req, res) => {
 
 
 
-
 let port = process.env.PORT;
 if (port == null || port == "") {
     port = 8081;
 }
-app.listen(port, () => {
+index.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
-
-// getPlaceDetails("Toronto", "CA").then(r => console.log(r))
-
-
-// get16DayForecast("43.651", "-79.347", "1").then(r => console.log(r))
-// getHistoricalWeather("43.651", "-79.347", '2021-04-09', '2021-04-10').then(r => console.log(r))
-// getRelatedImage('Toronto').then(r => console.log(r))
-// console.log('test')
-
-
-// console.log(`Your API key is ${process.env.API_KEY}`);

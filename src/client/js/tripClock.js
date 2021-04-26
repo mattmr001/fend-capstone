@@ -7,7 +7,10 @@ function tripClock(startDate, endDate){
     this.endDate = endDate;
 
     this.calculateTripDuration = calculateDaysBetweenDates(this.startDate, this.endDate);
-    this.calculateDaysUntilTrip = calculateDaysBetweenDates(this.dateToday, this.endDate);
+    this.calculateDaysUntilTrip = calculateDaysBetweenDates(this.dateToday, this.startDate);
+
+    this.formattedStartDate = formatDateToString(this.startDate)
+    this.formattedEndDate = formatDateToString(this.endDate)
 
      function calculateDaysBetweenDates(date1, date2){
         let startDate = new Date(date1);
@@ -18,17 +21,18 @@ function tripClock(startDate, endDate){
         const daysBetween = timeBetween / (1000 * 60 * 60 * 24);
 
         console.log(daysBetween)
-        return daysBetween
+        return parseInt(daysBetween)
     };
 
-//     TODO: if startdate is within the next 16 days run get16DayWeatherForecast
-//     TODO: elseif state is over 16 days run getHistoricalWeatherDATA
-//     TODO: If startDate is between 16 days run and EndDate is over 16 days
+    function formatDateToString(date) {
+        let d = new Date(date);
 
+        let yy = d.getUTCFullYear();
+        let mm = (d.getUTCMonth() + 1 < 10 ? '0' : '') + (d.getUTCMonth() + 1);
+        let dd = (d.getUTCDate() < 10 ? '0' : '') + (d.getUTCDate());
 
-
-
-
+        return yy + "-" + mm + "-" + dd;
+    }
 
 }
 
