@@ -93,11 +93,11 @@ function handleSubmit(event) {
                 let avgMaxTempPara = document.createElement('p')
                 avgMaxTempPara.classList.add('average-temperature__data')
                 avgMaxTempPara.classList.add('average-temperature__data--max')
-                avgMaxTempPara.innerHTML = `High - ${data.averageMaxTemp}°`
+                avgMaxTempPara.innerHTML = `High: ${data.averageMaxTemp}°`
                 let avgMinTempPara = document.createElement('p')
                 avgMinTempPara.classList.add('average-temperature__data')
                 avgMinTempPara.classList.add('average-temperature__data--min')
-                avgMinTempPara.innerHTML = `Low - ${data.averageMinTemp}°`
+                avgMinTempPara.innerHTML = `Low: ${data.averageMinTemp}°`
 
                 let avgTempDescriptionPara = document.createElement('p')
                 avgTempDescriptionPara.classList.add('average-temperature__data')
