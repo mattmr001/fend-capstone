@@ -25,6 +25,8 @@
 
 - [ ] Set up service works for offline usage
   https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#2
+  
+- [ ] put .env in the gitignore
 
 >Stage 5 - Service Workers
 >The project must have set up service workers in webpack.

@@ -1,5 +1,4 @@
 node_modules
-.env
 .idea/watcherTasks.xml
 package-lock.json
 .idea/workspace.xml
