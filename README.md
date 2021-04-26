@@ -10,14 +10,10 @@
 - Enter Country: CA
 
 ## Questions
-- [ ] How the hell do I create modules in server folder? Are their module naming conventions I should look at?
+- [ ] How the hell do I create modules in my server folder? Are there module naming conventions I should look at?
 
 
 - [ ] Why I am I getting duplicate results for the first form submission?
-
-
-- [ ] How do I set up the service worker at the end of my index.html page to cache trips for offline use? Why are they suggesting I do this?
-
 
 ## TODO
 
