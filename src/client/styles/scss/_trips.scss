@@ -1,0 +1,88 @@
+//:::::::::::::::::::::::::::::::::
+// Banner
+//:::::::::::::::::::::::::::::::::
+
+/* atoms */
+.trip__banner__img{
+  width: 100%;
+  height: auto;
+}
+
+/* molecule */
+.trip__banner{
+  grid-area: a;
+}
+
+//:::::::::::::::::::::::::::::::::
+// Info
+//:::::::::::::::::::::::::::::::::
+
+/* atoms */
+.trip__trip-info__data{}
+.trip__trip-info__data--temp-min{}
+.trip__trip-info__data--temp-max{}
+.trip__trip-info__data--description{}
+
+/* molecules */
+.trip__trip-info{grid-area: b;}
+.trip__trip-info__departure{}
+.trip__trip-info__count-down{}
+.trip__trip-info__average-temperatures{}
+
+//:::::::::::::::::::::::::::::::::
+// Daily forecasts
+//:::::::::::::::::::::::::::::::::
+
+/* atoms */
+.day__data{}
+.day__data--date{}
+.day__data--img{}
+.day__data--temp-max{}
+.day__data--temp-low{}
+.day__data--description{}
+
+/* molecules */
+.day{
+  text-align: center;
+}
+.trip__daily-forecasts{
+  grid-area: c;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  justify-content: center;
+  align-items: center;
+  //overflow-x: scroll;
+}
+
+
+//:::::::::::::::::::::::::::::::::
+// Trip
+//:::::::::::::::::::::::::::::::::
+.trip{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+    "a a b b"
+    "c c c c";
+    grid-gap: 1.953rem;
+
+    // border-radius: 2em;
+    background: #fbfbfb;
+    box-shadow: 9px 9px 12px #cecece, -9px -9px 12px #e8e8e8;
+    padding: 3.815rem;
+    margin-top: 1.563rem;
+    margin-bottom: 1.563rem;
+    justify-content: center;
+    border-radius: 8px
+  }
+
+
+.trips{
+  max-width: 1024px;
+  padding: 3.815rem;
+  // border-radius: 4em;
+  //background: #e8e8e8;
+  //box-shadow:  9px 9px 8px 0px #d5d5d5, -9px -9px 18px #ffffff
+}

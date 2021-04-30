@@ -1,20 +1,18 @@
-// import { checkForName } from './js/nameChecker'
+import { TripClock } from './js/tripClock'
 import { handleSubmit } from './js/formHandler'
-import { tripClock } from './js/tripClock'
+import { buildHeadlineRow } from './js/headlineBuilder'
+import { buildForm } from './js/formBuilder'
+import { removeTrip } from './js/tripRemover'
+import { buildNewTrip } from './js/newTripBuilder'
 
-// import "core-js/stable";
-import "regenerator-runtime/runtime";
-
+import 'regenerator-runtime/runtime'
 import './styles/main.scss'
 
-
-
-// console.log(checkForName);
-
-alert("I EXIST")
-
 export {
-    // checkForName,
-    handleSubmit,
-    tripClock
+  TripClock,
+  handleSubmit,
+  buildHeadlineRow,
+  buildForm,
+  buildNewTrip,
+  removeTrip
 }

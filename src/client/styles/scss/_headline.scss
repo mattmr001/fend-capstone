@@ -1,0 +1,29 @@
+
+
+
+/* atoms */
+.headline-row__header-wrapper{}
+.headline-row__header{}
+.headline-row__button-wrapper{}
+.headline-row__button{}
+
+/* molecules */
+
+/* organisms */
+.headline-row{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 40px;
+  flex-wrap: wrap;
+  //max-width: 1024px;
+  //margin-right: auto;
+  //margin-left: auto;
+  //margin: 6.104rem 3.052rem 3.052rem;
+
+  & div{
+  }
+
+  & form{
+    margin-top: 6.104rem;
+  }
+}

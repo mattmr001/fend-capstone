@@ -9,41 +9,36 @@
 
         <header>
             <div class="">
-                Travel Planner
+                <h1>Travel Planner</h1>
             </div>
         </header>
 
-        <main class="l-container">
-
-            <div id="banner" class="banner">
-            </div>
-            <section class="l-container__inner">
-                <div class ="holder headline">
-                    My Trips:
-                </div>
-                <form id="myForm" onsubmit="return Client.handleSubmit(event)">
-                    <input type="text" id="city" placeholder="Enter City">
-                    <input type="text" id="country" placeholder="Enter Country Code">
-                    <input type="date" id="startDate" placeholder="Start Date">
-                    <input type="date" id="endDate" placeholder="End Date">
-                    <input class="btn-primary" id="generate" type="submit" value="submit" onclick="return Client.handleSubmit(event)" onsubmit="return Client.handleSubmit(event)">
+        <main id="mainContainer" class="l-container">
+            <section class="form-wrapper" id="formWrapper">
+                <form class="form" id="myForm" onsubmit="return Client.handleSubmit(event)">
+                    <div class="form__field-group">
+                        <input class="form__field" type="text" id="city" placeholder="Enter City">
+                        <input class="form__field" type="text" id="country" placeholder="Enter Country Code">
+                    </div>
+                    <div class="form__field-group">
+                        <input class="form__field" type="date" id="startDate" placeholder="Start Date">
+                        <input class="form__field" type="date" id="endDate" placeholder="End Date">
+                    </div>
                 </form>
+                <button class="btn-primary" id="generate" type="submit" value="submit">Search</button>
             </section>
 
-            <section id="trips" class ="holder entry">
-
-            </section>
-
-            <section id="weatherForecasts">
-
-            </section>
-
-<!--            <section>-->
-<!--                <form class="" onsubmit="return Client.handleSubmit(event)">-->
-<!--                    <input id="name" type="text" name="input" value="" placeholder="URL">-->
-<!--                    <input id="generate" type="submit" name="" value="submit" onclick="return Client.handleSubmit(event)" onsubmit="return Client.handleSubmit(event)">-->
-<!--                </form>-->
+<!--            <section id="tripHeadline" class="headline-row">-->
+<!--                <div>-->
+<!--                    <h2>My Trips:</h2>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <button class="btn-primary" id="buildForm">+ ADD TRIP</button>-->
+<!--                </div>-->
 <!--            </section>-->
+
+            <section id="trips" class ="trips">
+            </section>
 
         </main>
 
