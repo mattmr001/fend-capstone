@@ -2,7 +2,6 @@ import { TripClock } from './js/tripClock'
 import { handleSubmit } from './js/formHandler'
 import { buildHeadlineRow } from './js/headlineBuilder'
 import { buildForm } from './js/formBuilder'
-import { removeTrip } from './js/tripRemover'
 import { buildNewTrip } from './js/newTripBuilder'
 
 import 'regenerator-runtime/runtime'
@@ -13,6 +12,5 @@ export {
   handleSubmit,
   buildHeadlineRow,
   buildForm,
-  buildNewTrip,
-  removeTrip
+  buildNewTrip
 }
