@@ -84,7 +84,12 @@ async function getWeatherNorms (lat, lon, startDate, endDate) {
     }
 
     const options = {
-      method: 'GET'
+      method: 'GET',
+      origin: ['http://localhost:8081', 'https://calm-refuge-82542.herokuapp.com'],
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
 
     const apiQuery = `${protocol}://${weatherBitUrl}?${querystring.stringify(params)}`
@@ -112,7 +117,12 @@ async function getSixteenDayForecast (lat, lon, days) {
     }
 
     const options = {
-      method: 'GET'
+      method: 'GET',
+      origin: ['http://localhost:8081', 'https://calm-refuge-82542.herokuapp.com'],
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
 
     const apiQuery = `${protocol}://${weatherBitUrl}?${querystring.stringify(params)}`
@@ -139,7 +149,12 @@ async function getRelatedImage (city) {
     }
 
     const options = {
-      method: 'GET'
+      method: 'GET',
+      origin: ['http://localhost:8081', 'https://calm-refuge-82542.herokuapp.com'],
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
 
     const apiQuery = `${protocol}://${pixabayUrl}?${querystring.stringify(params)}`
