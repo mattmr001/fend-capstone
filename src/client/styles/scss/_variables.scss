@@ -5,3 +5,35 @@ $h4-font-size: 1.25rem;
 $h5-font-size: 1rem;
 $small-font-size: 0.64rem;
 $body-font-size: 0.8rem;
+
+/// Breakpoints map
+/// @prop {String} keys - Keys are identifiers mapped to a given length
+/// @prop {Map} values - Values are actual breakpoints expressed in pixels
+$breakpoints: (
+        'extra-small' : (max-width: 300px),
+        'small' : (max-width: 500px),
+        'medium': (max-width: 720px),
+        'large': (max-width: 1232px),
+        'huge': (max-width: 1440px),
+);
+
+
+/// Responsive breakpoint manager
+@mixin respond-to($breakpoint) {
+  $raw-query: map-get($breakpoints, $breakpoint);
+
+  @if $raw-query {
+    $query: if(
+                    type-of($raw-query) == 'string',
+                    unquote($raw-query),
+                    inspect($raw-query)
+    );
+
+    @media #{$query} {
+      @content;
+    }
+  } @else {
+    @error 'No value found for `#{$breakpoint}`. '
+         + 'Please make sure it is defined in `$breakpoints` map.';
+  }
+}

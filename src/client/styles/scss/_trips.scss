@@ -50,6 +50,9 @@
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  @include respond-to('small') {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  }
   justify-content: center;
   align-items: center;
   //overflow-x: scroll;
@@ -75,7 +78,15 @@
     margin-top: 1.563rem;
     margin-bottom: 1.563rem;
     justify-content: center;
-    border-radius: 8px
+    border-radius: 8px;
+
+    @include respond-to('large') {
+      grid-template-columns: repeat(4,1fr);
+      grid-template-areas:
+      "a a a a"
+      "b b b b"
+      "c c c c";
+    }
   }
 
 

@@ -10,7 +10,12 @@
 
 
 /* Scale 1.250 - Major Third*/
-html {font-size: 100%;} /*16px*/
+html {
+    font-size: 100%;
+    @include respond-to('extra-small') {
+        font-size: 80%;
+    }
+} /*16px*/
 
 body {
     display: flex;

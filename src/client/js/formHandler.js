@@ -25,11 +25,11 @@ function handleSubmit (event) {
   console.log('::: Form Submitted :::')
   // eslint-disable-next-line no-undef
   fetch('http://localhost:8081/tripData', {
-    method: 'POST',
-    cache: 'no-cache',
-    credentials: 'same-origin',
+    method: "POST",
+    mode: "cors",
+    credentials: "same-origin",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       city: `${city}`,

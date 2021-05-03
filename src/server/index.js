@@ -52,7 +52,7 @@ async function getPlaceDetails (placename, country) {
     }
 
     const options = {
-      method: 'GET'
+      method: 'GET',
     }
 
     const apiQuery = `${protocol}://${geoNamesUrl}?${querystring.stringify(params)}`
@@ -85,11 +85,6 @@ async function getWeatherNorms (lat, lon, startDate, endDate) {
 
     const options = {
       method: 'GET',
-      origin: ['http://localhost:8081', 'https://calm-refuge-82542.herokuapp.com'],
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      }
     }
 
     const apiQuery = `${protocol}://${weatherBitUrl}?${querystring.stringify(params)}`
@@ -118,11 +113,6 @@ async function getSixteenDayForecast (lat, lon, days) {
 
     const options = {
       method: 'GET',
-      origin: ['http://localhost:8081', 'https://calm-refuge-82542.herokuapp.com'],
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      }
     }
 
     const apiQuery = `${protocol}://${weatherBitUrl}?${querystring.stringify(params)}`
@@ -150,11 +140,6 @@ async function getRelatedImage (city) {
 
     const options = {
       method: 'GET',
-      origin: ['http://localhost:8081', 'https://calm-refuge-82542.herokuapp.com'],
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      }
     }
 
     const apiQuery = `${protocol}://${pixabayUrl}?${querystring.stringify(params)}`
@@ -366,6 +351,7 @@ index.post('/tripData', async (req, res) => {
     tripData.tripDuration = tripDuration
     tripData.startDate = startDate
     tripData.endDate = endDate
+
 
     // :::::::::::::::::::::::::::::::::::::::::::
     const placeDetails = await getPlaceDetails(city, country)
