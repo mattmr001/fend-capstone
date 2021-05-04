@@ -2,8 +2,9 @@
 
 ## RUN
 
-- npm run build-prod
-- npm run start
+- npm install -i ( This will install the packages from package.json)
+- npm run build-prod ( This will build the dist folder )
+- npm run start ( This will start up the production server)
 
 - Select any future Start Date
 - Select any future end Date
