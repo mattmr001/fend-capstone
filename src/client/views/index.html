@@ -2,7 +2,8 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-        <title>Test</title>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+        <title>FEND CAPSTONE</title>
     </head>
 
     <body>
@@ -15,27 +16,18 @@
 
         <main id="mainContainer" class="l-container">
             <section class="form-wrapper" id="formWrapper">
-                <form class="form" id="myForm" onsubmit="return Client.handleSubmit(event)">
+                <form class="form" id="myForm">
                     <div class="form__field-group">
                         <input class="form__field" type="text" id="city" placeholder="Enter City">
                         <input class="form__field" type="text" id="country" placeholder="Enter Country Code">
                     </div>
                     <div class="form__field-group">
-                        <input class="form__field" type="date" id="startDate" placeholder="Start Date">
-                        <input class="form__field" type="date" id="endDate" placeholder="End Date">
+                        <input class="form__field" type="date" id="startDate">
+                        <input class="form__field" type="date" id="endDate">
                     </div>
                 </form>
-                <button class="btn-primary" id="generate" type="submit" value="submit">Search</button>
+                <button class="btn-primary" id="generate" value="submit">Search</button>
             </section>
-
-<!--            <section id="tripHeadline" class="headline-row">-->
-<!--                <div>-->
-<!--                    <h2>My Trips:</h2>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <button class="btn-primary" id="buildForm">+ ADD TRIP</button>-->
-<!--                </div>-->
-<!--            </section>-->
 
             <section id="trips" class ="trips">
             </section>
@@ -57,16 +49,3 @@
         </script>
     </body>
 </html>
-
-
-<!--let days = []-->
-<!--for (let i in sixteenDayForecast.data) {-->
-
-<!--let day = {};-->
-<!--// day[validDate] = sixteenDayForecast.data[i].valid_date;-->
-<!--day[maxTemp] = sixteenDayForecast.data[i].max_temp;-->
-<!--day[lowTemp] = sixteenDayForecast.data[i].low_temp;-->
-<!--days.push(day)-->
-
-<!--console.log(day);-->
-<!--}-->

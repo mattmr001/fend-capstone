@@ -141,6 +141,7 @@ async function getRelatedImage (city) {
     const params = {
       key: `${process.env.PIXABAY_API_KEY}`,
       q: `${city}`,
+      category: 'places',
       order: 'popular',
       image_type: 'photo'
     }

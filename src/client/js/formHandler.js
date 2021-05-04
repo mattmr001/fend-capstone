@@ -1,5 +1,7 @@
-const button = document.getElementById('generate')
-button.addEventListener('click', handleSubmit)
+document.addEventListener('DOMContentLoaded', function () {
+  const button = document.getElementById('generate')
+  button.addEventListener('click', handleSubmit)
+})
 
 function handleSubmit (event) {
   event.preventDefault()
@@ -49,6 +51,7 @@ function handleSubmit (event) {
         bannerDiv.classList.add('trip__banner')
         const bannerImg = document.createElement('img')
         bannerImg.classList.add('trip__banner__img')
+        bannerImg.setAttribute('alt', 'City image')
         bannerImg.src = `${data.cityImg}`
         bannerDiv.appendChild(bannerImg)
         parentDiv.appendChild(bannerDiv)
@@ -130,6 +133,7 @@ function handleSubmit (event) {
           const dayDataImg = document.createElement('img')
           dayDataImg.classList.add('day__data')
           dayDataImg.classList.add('day__data--img')
+          dayDataImg.setAttribute('alt', 'weather image')
           dayDataImg.src = 'https://place-hold.it/48x48'
           dayDiv.appendChild(dayDataImg)
 

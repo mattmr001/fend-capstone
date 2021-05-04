@@ -1,7 +1,3 @@
-// const addTripButton = document.getElementById('buildForm')
-// eslint-disable-next-line no-undef
-// addTripButton.addEventListener('click', buildNewTrip)
-
 function buildNewTrip (event) {
   event.preventDefault()
   const mainElm = document.querySelector('#mainContainer')

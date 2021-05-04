@@ -38,8 +38,6 @@ module.exports = {
     new MiniCssExtractPlugin({ filename: '[name].css' }),
     new WorkboxPlugin.GenerateSW({ cleanupOutdatedCaches: true }),
     new CleanWebpackPlugin({
-      // Simulate the removal of files
-      dry: true,
       // Write Logs to Console
       verbose: true,
       // Automatically remove all unused webpack assets on rebuild

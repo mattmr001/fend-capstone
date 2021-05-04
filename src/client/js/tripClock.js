@@ -18,8 +18,6 @@ function TripClock (startDate, endDate) {
     const timeBetween = endDate.getTime() - startDate.getTime()
     // calculate days between dates by dividing the total of milliseconds in a day
     const daysBetween = timeBetween / (1000 * 60 * 60 * 24)
-
-    console.log(daysBetween)
     return parseInt(daysBetween)
   };
 
