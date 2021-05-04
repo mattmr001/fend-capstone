@@ -21,6 +21,14 @@ index.use(cors())
 /* Initialize the main project folder */
 index.use(express.static('dist'))
 
+index.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Credentials', true)
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json')
+  next()
+})
+
 // const port = 8081
 
 /* Local Modules */
@@ -52,7 +60,7 @@ async function getPlaceDetails (placename, country) {
     }
 
     const options = {
-      method: 'GET',
+      method: 'GET'
     }
 
     const apiQuery = `${protocol}://${geoNamesUrl}?${querystring.stringify(params)}`
@@ -84,7 +92,7 @@ async function getWeatherNorms (lat, lon, startDate, endDate) {
     }
 
     const options = {
-      method: 'GET',
+      method: 'GET'
     }
 
     const apiQuery = `${protocol}://${weatherBitUrl}?${querystring.stringify(params)}`
@@ -112,7 +120,7 @@ async function getSixteenDayForecast (lat, lon, days) {
     }
 
     const options = {
-      method: 'GET',
+      method: 'GET'
     }
 
     const apiQuery = `${protocol}://${weatherBitUrl}?${querystring.stringify(params)}`
@@ -139,7 +147,7 @@ async function getRelatedImage (city) {
     }
 
     const options = {
-      method: 'GET',
+      method: 'GET'
     }
 
     const apiQuery = `${protocol}://${pixabayUrl}?${querystring.stringify(params)}`
@@ -351,7 +359,6 @@ index.post('/tripData', async (req, res) => {
     tripData.tripDuration = tripDuration
     tripData.startDate = startDate
     tripData.endDate = endDate
-
 
     // :::::::::::::::::::::::::::::::::::::::::::
     const placeDetails = await getPlaceDetails(city, country)
