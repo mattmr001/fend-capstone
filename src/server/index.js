@@ -13,6 +13,8 @@ dotenv.config()
 const querystring = require('querystring')
 const fetch = require('node-fetch')
 const cors = require('cors')
+// To remove regeneratorRuntime error while testing
+require('babel-polyfill')
 
 /* Middleware */
 index.use(express.json())
@@ -43,9 +45,6 @@ index.get('/test', function (req, res) {
 })
 
 // :::::::::::::::::::::::::::::::::::::::::::
-// TODO: Create module for the functions below fetching api data
-// :::::::::::::::::::::::::::::::::::::::::::
-
 async function getPlaceDetails (placename, country) {
   // API document: https://www.geonames.org/export/web-services.html
   // eslint-disable-next-line no-useless-catch
@@ -161,8 +160,6 @@ async function getRelatedImage (city) {
   }
 }
 
-// :::::::::::::::::::::::::::::::::::::::::::
-// TODO: Create a module for the functions below. These functions help us build properties for our tripData object( whats a good name for a module name for this?)
 // :::::::::::::::::::::::::::::::::::::::::::
 function buildListFromObjectAttribute (obj, dataKey) {
   const attributeList = []
@@ -285,9 +282,6 @@ function buildDailyForecasts (apiFetch, tripData) {
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::
-// TODO: Create module for the functions below. These functions call helpers and build data related to specific api call. (whats a good name for this module?)
-// :::::::::::::::::::::::::::::::::::::::::::
-
 function buildTripDataPlaceDetails (tripData, placeDetails) {
   tripData.lat = placeDetails.postalcodes[0].lat
   tripData.lon = placeDetails.postalcodes[0].lng
@@ -321,23 +315,6 @@ function buildTripDataDestinationImage (tripData, relatedImage) {
   const cityImg = destinationImage.hits[0].webformatURL
   tripData.cityImg = cityImg
 }
-
-// function buildTripDataDescriptionImages (tripData, relatedImage) {
-//   const descriptionImages = {}
-//   for (const i in tripData.weatherForecasts) {
-//     const description = tripData.weatherForecasts[i].description
-//     const relatedImage = relatedImage(description)
-//
-//     const weatherDescriptionImg = relatedImage.hits[0].previewURL
-//     descriptionImages[description] = weatherDescriptionImg
-//   }
-//   tripData.descriptionImages = descriptionImages
-//
-//   // console.log("LOG descriptionImages OBJECT")
-//   // console.log(descriptionImages)
-//   console.log('LOG tripData.descriptionImages OBJECT ')
-//   console.log(tripData.descriptionImages)
-// }
 
 index.post('/tripData', async (req, res) => {
   try {
@@ -375,11 +352,6 @@ index.post('/tripData', async (req, res) => {
 
     const destinationImage = await getRelatedImage(city)
     buildTripDataDestinationImage(tripData, destinationImage)
-
-    // TODO: for each daily forecast add a search pixabay for an img based on the description of the weather
-    // const descriptionImages = await getRelatedImage()
-    // buildTripDataDescriptionImages(tripData, descriptionImages)
-
     // Print out the built tripData
     console.log(tripData)
     res.json(tripData)
@@ -395,3 +367,5 @@ if (port == null || port === '') {
 index.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
+module.exports = index

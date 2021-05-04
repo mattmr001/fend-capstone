@@ -19,17 +19,16 @@ function handleSubmit (event) {
 
   const formattedStartDate = clock.formattedStartDate
   const formattedEndDate = clock.formattedEndDate
-
-  console.log(daysUntilTrip)
+  // console.log(daysUntilTrip)
 
   console.log('::: Form Submitted :::')
   // eslint-disable-next-line no-undef
   fetch('http://localhost:8081/tripData', {
-    method: "POST",
-    mode: "cors",
-    credentials: "same-origin",
+    method: 'POST',
+    mode: 'cors',
+    credentials: 'same-origin',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       city: `${city}`,

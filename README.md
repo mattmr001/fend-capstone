@@ -1,3 +1,5 @@
+# FEND CAPSTONE
+
 ## RUN
 
 - npm run build-prod
@@ -5,8 +7,8 @@
 
 - Select any future Start Date
 - Select any future end Date
-- Enter city: Toronto
-- Enter Country: CA
+- Example select Enter city: Toronto
+- Example select Enter Country: CA
 
 ## Project Goals
 The goal of this project is to give you practice with:
@@ -24,7 +26,7 @@ The goal of this project is to give you practice with:
 - https://www.weatherbit.io/api/weather-forecast-16-day
 - https://pixabay.com/service/about/api/
 
-## Deploying
+## Deployment
 
 Website is deployed on heroku.
 
