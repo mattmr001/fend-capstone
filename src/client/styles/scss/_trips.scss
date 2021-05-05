@@ -93,6 +93,9 @@
 .trips{
   max-width: 1024px;
   padding: 3.815rem;
+  @include respond-to('small') {
+    padding: 0rem;
+  }
   // border-radius: 4em;
   //background: #e8e8e8;
   //box-shadow:  9px 9px 8px 0px #d5d5d5, -9px -9px 18px #ffffff

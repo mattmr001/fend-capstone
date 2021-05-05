@@ -65,6 +65,9 @@ main {
 section {
     margin: 3.052rem;
     grid-gap:  1.414rem;
+    @include respond-to('small') {
+        margin: 0rem;
+    }
 }
 
 

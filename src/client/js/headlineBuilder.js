@@ -1,5 +1,3 @@
-import { buildNewTrip } from './newTripBuilder'
-
 function buildHeadlineRow (parentDiv) {
   const headlineFragment = new DocumentFragment()
   // const tripHeadline = document.querySelector('#tripHeadline')
