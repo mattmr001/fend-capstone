@@ -50,7 +50,6 @@ function buildForm (parentDiv) {
     const formElm = document.createElement('form')
     formElm.classList.add('form')
     formElm.setAttribute('id', 'myForm')
-    // formElm.setAttribute('onsubmit', 'return Client.handleSubmit(event)')
     buildFieldGroupLocationDiv(formElm)
     buildFieldGroupDatesDiv(formElm)
     buildFormButton(formElm)
