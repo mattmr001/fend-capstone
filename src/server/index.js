@@ -317,6 +317,7 @@ function buildTripDataDestinationImage (tripData, relatedImage) {
   tripData.cityImg = cityImg
 }
 
+const tripData = {}
 index.post('/tripData', async (req, res) => {
   try {
     // Create variables from the values posted from our index page
@@ -331,7 +332,7 @@ index.post('/tripData', async (req, res) => {
     // console.log(`req BODY: ${JSON.stringify(body)}`)
 
     // Begin building the properties for our tripData object.
-    const tripData = {}
+    // const tripData = {}
     tripData.city = city
     tripData.country = country
     tripData.tripDuration = tripDuration
@@ -361,12 +362,12 @@ index.post('/tripData', async (req, res) => {
   }
 })
 
-let port = process.env.PORT
-if (port == null || port === '') {
-  port = 8081
-}
-index.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+// let port = process.env.PORT
+// if (port == null || port === '') {
+//   port = 8081
+// }
+// index.listen(port, () => {
+//   console.log(`Example app listening at http://localhost:${port}`)
+// })
 
 module.exports = index
