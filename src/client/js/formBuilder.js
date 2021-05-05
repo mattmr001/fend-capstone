@@ -28,14 +28,12 @@ function buildForm (parentDiv) {
     formFieldGroupStartDateInput.classList.add('form__field')
     formFieldGroupStartDateInput.setAttribute('type', 'date')
     formFieldGroupStartDateInput.setAttribute('id', 'startDate')
-    formFieldGroupStartDateInput.setAttribute('placeholder', 'Start Date')
     formFieldGroupDatesDiv.appendChild(formFieldGroupStartDateInput)
 
     const formFieldGroupEndDateInput = document.createElement('input')
     formFieldGroupEndDateInput.classList.add('form__field')
     formFieldGroupEndDateInput.setAttribute('type', 'date')
     formFieldGroupEndDateInput.setAttribute('id', 'endDate')
-    formFieldGroupEndDateInput.setAttribute('placeholder', 'End Date')
     formFieldGroupDatesDiv.appendChild(formFieldGroupEndDateInput)
     parentForm.append(formFieldGroupDatesDiv)
   }
