@@ -15,7 +15,7 @@
   justify-content: space-between;
   padding: 10px 40px;
   flex-wrap: wrap;
-  @include respond-to('small') {
+  @include respond-to('medium') {
     justify-content: center;
   }
 

@@ -1,3 +1,5 @@
+import { handleSubmit } from './formHandler'
+
 function buildForm (parentDiv) {
   // eslint-disable-next-line no-undef
   function buildFieldGroupLocationDiv (parentForm) {
@@ -43,6 +45,7 @@ function buildForm (parentDiv) {
     buttonElm.setAttribute('type', 'submit')
     buttonElm.setAttribute('id', 'generate')
     buttonElm.setAttribute('value', 'submit')
+    buttonElm.addEventListener('click', handleSubmit)
     buttonElm.innerHTML = 'Search'
     parentForm.appendChild(buttonElm)
   }

@@ -93,7 +93,7 @@
 .trips{
   max-width: 1024px;
   padding: 3.815rem;
-  @include respond-to('small') {
+  @include respond-to('medium') {
     padding: 0rem;
   }
   // border-radius: 4em;
